@@ -433,6 +433,44 @@
 <h3 id="涉及方程"><a href="#涉及方程" class="headerlink" title="涉及方程"></a>涉及方程</h3><p>向前传播<br><img src="/image/deepLearning/40.png" alt><br>反向传播<br><img src="/image/deepLearning/41.png" alt></p>
 <h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>重点关注模型组装好后，如何使用，如何预测，精确度计算，超参数如何训练，<a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">迁移学习</a>怎么做</p>
 <p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralNetworkModel/index.py" target="_blank" rel="noopener">非线性逻辑回归实现代码</a></p>
+<h2 id="L层神经网络实现"><a href="#L层神经网络实现" class="headerlink" title="L层神经网络实现"></a>L层神经网络实现</h2><p>整体架构<br><img src="/image/deepLearning/Lmodel.png" alt></p>
+<ol>
+<li>向前传播的时候，前L-1层都是先线性然后用relu 函数激活，最后一层是线性然后用sigmoid 函数激活<blockquote>
+<p>The model’s structure is: LINEAR -&gt; RELU -&gt; LINEAR -&gt; SIGMOID.<br><img src="/image/deepLearning/forward.png" alt></p>
+</blockquote>
+</li>
+<li>计算损失函数<br><img src="/image/deepLearning/cost.png" alt></li>
+<li>反向传播的时候，与向前传播相反，除第一层是线性然后用sigmoid 函数激活，后面l-1层是线性然后用relu 函数激活，前面的每一层都是线性然后用relu 函数激活<blockquote>
+<p>The model’s structure is: SIGMOID -&gt; LINEAR -&gt; RELU -&gt; LINEAR -&gt; RELU -&gt; … -&gt; SIGMOID.<br>for every forward function, there is a corresponding backward function. That is why at every step of your forward module you will be storing some values in a cache. The cached values are useful for computing gradients. In the backpropagation module you will then use the cache to calculate the gradients. This assignment will show you exactly how to carry out each of these steps.<br><img src="/image/deepLearning/backforward.png" alt><br>使用链式法则, 对下面的线性函数求导dw, db, dA<br><img src="/image/deepLearning/dao1.png" alt><br>得到反向传播计算公式<br><img src="/image/deepLearning/dao2.png" alt></p>
+</blockquote>
+</li>
+</ol>
+<p>注意输出层的sigmoid 函数求导<br><img src="/image/deepLearning/dao3.png" alt></p>
+<h2 id="运行异常"><a href="#运行异常" class="headerlink" title="运行异常"></a>运行异常</h2><ol>
+<li>参数初始化问题</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>初始化方式</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>np.random.randn(layer_dims[l], layer_dims[l - 1])</code></td>
+<td>标准正态分布初始化</td>
+<td>简单，但可能导致梯度爆炸或梯度消失，尤其是在深层网络中。</td>
+</tr>
+<tr>
+<td><code>np.random.randn(layer_dims[l], layer_dims[l-1]) / np.sqrt(layer_dims[l-1])</code></td>
+<td>Xavier初始化的变体，<code>np.sqrt(layer_dims[l-1])</code>是上一层神经元个数</td>
+<td>提供更稳定的梯度和激活值，适合对称激活函数（如Sigmoid、Tanh）。减少梯度爆炸或梯度消失问题。</td>
+</tr>
+</tbody>
+</table>
+<p>如果使用 ReLU 或 Leaky ReLU 作为激活函数，可以采用 He 初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parameters[&apos;W&apos; + str(l)] = np.random.randn(layer_dims[l], layer_dims[l-1]) * np.sqrt(2 / layer_dims[l-1])</span><br></pre></td></tr></table></figure></p>
 
           
         
