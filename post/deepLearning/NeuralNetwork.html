@@ -125,14 +125,14 @@
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/39.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/40.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/41.png">
-<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/Lmodel.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/LModel.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/forward.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/cost.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/backforward.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dao1.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dao2.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dao3.png">
-<meta property="og:updated_time" content="2024-12-19T13:16:05.604Z">
+<meta property="og:updated_time" content="2025-01-22T09:17:46.723Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="神经网络的相关推导公式">
 <meta name="twitter:description" content="矩阵维度为方便重复计算，减少for循环的使用，在神经网络的计算过程中，尽可能的将数据转成向量进行计算利用向量的广播能力进行快速计算，神经网络多层传递过程中，矩阵的维度一般遵循以下关系 如果前一层（输入）维度为（m,1），中间层维度是（n, 1）, 后一层（输出）维度是（p， 1）那么 中间层w的维度就是（n, m）， b 的维度就是（n，1）, b 的维度始终和中间层一致输出层W的维度（p,n），">
@@ -470,7 +470,7 @@
 <h3 id="涉及方程"><a href="#涉及方程" class="headerlink" title="涉及方程"></a>涉及方程</h3><p>向前传播<br><img src="/image/deepLearning/40.png" alt><br>反向传播<br><img src="/image/deepLearning/41.png" alt></p>
 <h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>重点关注模型组装好后，如何使用，如何预测，精确度计算，超参数如何训练，<a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">迁移学习</a>怎么做</p>
 <p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralNetworkModel/index.py" target="_blank" rel="noopener">非线性逻辑回归实现代码</a></p>
-<h2 id="L层神经网络实现"><a href="#L层神经网络实现" class="headerlink" title="L层神经网络实现"></a>L层神经网络实现</h2><p>整体架构<br><img src="/image/deepLearning/Lmodel.png" alt></p>
+<h2 id="L层神经网络实现"><a href="#L层神经网络实现" class="headerlink" title="L层神经网络实现"></a>L层神经网络实现</h2><p>整体架构<br><img src="/image/deepLearning/LModel.png" alt></p>
 <ol>
 <li>向前传播的时候，前L-1层都是先线性然后用relu 函数激活，最后一层是线性然后用sigmoid 函数激活<blockquote>
 <p>The model’s structure is: LINEAR -&gt; RELU -&gt; LINEAR -&gt; SIGMOID.<br><img src="/image/deepLearning/forward.png" alt></p>
@@ -694,7 +694,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
