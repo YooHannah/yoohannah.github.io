@@ -132,7 +132,7 @@
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dao1.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dao2.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dao3.png">
-<meta property="og:updated_time" content="2025-01-22T09:45:41.393Z">
+<meta property="og:updated_time" content="2025-01-24T09:38:15.024Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="神经网络的相关推导公式">
 <meta name="twitter:description" content="矩阵维度为方便重复计算，减少for循环的使用，在神经网络的计算过程中，尽可能的将数据转成向量进行计算利用向量的广播能力进行快速计算，神经网络多层传递过程中，矩阵的维度一般遵循以下关系 如果前一层（输入）维度为（m,1），中间层维度是（n, 1）, 后一层（输出）维度是（p， 1）那么 中间层w的维度就是（n, m）， b 的维度就是（n，1）, b 的维度始终和中间层一致输出层W的维度（p,n），">
@@ -397,9 +397,9 @@
 <h3 id="为什么要使用深层网络"><a href="#为什么要使用深层网络" class="headerlink" title="为什么要使用深层网络"></a>为什么要使用深层网络</h3><p>使用小的（单层神经元数据量少的）的但是有多层的深层网络，往往会比使用浅层(layer数少)网络计算步骤更简洁<br>比如下面的电路与或非门计算过程<br>如果像左侧使用深层网络，每一次层神经元都少一半<br>如果使用右侧单层神经网络，这一层上的神经元会以2的指数方式计算<br>总体算下来，深层网络需要处理的神经元会少很多</p>
 <p><img src="/image/deepLearning/34.png" alt></p>
 <h1 id="实验练习"><a href="#实验练习" class="headerlink" title="实验练习"></a>实验练习</h1><h2 id="逻辑回归全过程"><a href="#逻辑回归全过程" class="headerlink" title="逻辑回归全过程"></a>逻辑回归全过程</h2><p><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Neural%20Networks%20and%20Deep%20Learning/Week%202/Logistic%20Regression%20as%20a%20Neural%20Network/Logistic%20Regression%20with%20a%20Neural%20Network%20mindset%20Solution.ipynb" target="_blank" rel="noopener">gitbub[ipynb]链接</a><br><a href="https://colab.research.google.com/github/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Neural%20Networks%20and%20Deep%20Learning/Week%202/Logistic%20Regression%20as%20a%20Neural%20Network/Logistic%20Regression%20with%20a%20Neural%20Network%20mindset%20Solution.ipynb#scrollTo=OEOpKgClZLco" target="_blank" rel="noopener">实验</a></p>
-<h2 id="思路梳理"><a href="#思路梳理" class="headerlink" title="思路梳理"></a>思路梳理</h2><h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><h3 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h3><p>实验中要实现对一张图片是否是猫的判断，<br>首先要对图片进行处理，将图片转换成向量，<br>一个像素点由RGB三个数据组成, 现在如果横竖都取图片的64个像素点<br>一张64<em>64的图片就有64</em>64=4096个 [r,g,b] 这样的数据，<br>一张图片的数据表示就是</p>
+<h2 id="思路梳理"><a href="#思路梳理" class="headerlink" title="思路梳理"></a>思路梳理</h2><h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><h3 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h3><p>实验中要实现对一张图片是否是猫的判断，<br>首先要对图片进行处理，将图片转换成向量，<br>一个像素点由RGB三个数据组成, 现在如果横竖都取图片的64个像素点<br>一张64X64的图片就有64X64=4096个 [r,g,b] 这样的数据，<br>一张图片的数据表示就是</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    [[196 192 190], [193 186 182],...中间还有61组, [188 179 174]], 每一行 有64个</span><br><span class="line">    [[196 192 190], [193 186 182],..., [188 179 174]],</span><br><span class="line">    ... 中间有60行</span><br><span class="line">    [[196 192 190], [193 186 182],..., [188 179 174]]</span><br><span class="line">    [[196 192 190], [193 186 182],..., [88 79 74]]</span><br><span class="line">] 一共64行</span><br></pre></td></tr></table></figure>
-<p>现在把所有数据摊平再转置，就可转成一个[64<em>64</em>3=12288, 1]的向量,<br>也就是m个测试数据组成的矩阵中的一列</p>
+<p>现在把所有数据摊平再转置，就可转成一个[64X64X3=12288, 1]的向量,<br>也就是m个测试数据组成的矩阵中的一列</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[196,], [192,],..., [88,], [79,],[74,]]</span><br></pre></td></tr></table></figure>
 <p>A trick when you want to flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a) is to use:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_flatten = X.reshape(X.shape[0], -1).T</span><br></pre></td></tr></table></figure>
@@ -551,6 +551,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/post/nodejs/streamExamp.html" rel="prev" title="一个实现流通信的案例">
+                一个实现流通信的案例 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -615,7 +619,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">240</span>
+              <span class="site-state-item-count">242</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -1,0 +1,700 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="数据集的使用一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）训练集用于训练模型交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合) 如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些优化深度神经网络的方法">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/OptNeuralNetwork.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="数据集的使用一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）训练集用于训练模型交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合) 如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/42.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/43.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/44.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/119.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/45.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/46.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/48.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/47.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/60.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/61.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/49.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/50.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/51.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/52.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/53.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/54.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/55.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/56.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/57.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/58.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/59.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/62.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/63.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/64.png">
+<meta property="og:updated_time" content="2025-01-30T09:50:10.984Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些优化深度神经网络的方法">
+<meta name="twitter:description" content="数据集的使用一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）训练集用于训练模型交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合) 如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/42.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/OptNeuralNetwork.html">
+
+
+
+
+
+  <title> 一些优化深度神经网络的方法 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/OptNeuralNetwork.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一些优化深度神经网络的方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-29T10:48:37+08:00">
+                2025-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据集的使用"><a href="#数据集的使用" class="headerlink" title="数据集的使用"></a>数据集的使用</h1><p>一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）<br>训练集用于训练模型<br>交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣<br>测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合)</p>
+<p>如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和评估<br>将测试集数据合并到交叉验证集中，数据集最终只会剩下训练集和测试验证集</p>
+<p>另外需要注意进行训练的数据集和验证测试的数据集要来自同一个分布，否则会影响训练速度<br>比如训练集图片来自网络，分辨率高，清晰度高，但是测试集图片来自手机，分辨率低，清晰度低<br>那么训练出来的模型在测试集上的表现可能会很差</p>
+<p><img src="/image/deepLearning/42.png" alt><br><img src="/image/deepLearning/43.png" alt></p>
+<h1 id="使用偏差-bias-和方差-variance-对模型进行评估"><a href="#使用偏差-bias-和方差-variance-对模型进行评估" class="headerlink" title="使用偏差(bias)和方差(variance)对模型进行评估"></a>使用偏差(bias)和方差(variance)对模型进行评估</h1><p>高偏差一般欠拟合<br>高方差一般过拟合<br>先来复习一下偏差和方差的定义<br><a href="https://yoohannah.github.io/post/machineLearning/overfitting.html">解决过拟合问题</a><br><a href="https://yoohannah.github.io/post/machineLearning/biasVariance.html">高偏差和高方差</a><br><img src="/image/deepLearning/44.png" alt><br><img src="/image/LLM/119.png" alt></p>
+<h2 id="正则化处理-Regularization-过拟合问题"><a href="#正则化处理-Regularization-过拟合问题" class="headerlink" title="正则化处理(Regularization)过拟合问题"></a>正则化处理(Regularization)过拟合问题</h2><p>通过给成本函数增加正则化项，进行权重衰减，来降低模型的方差，从而避免过拟合的出现<br><img src="/image/deepLearning/45.png" alt><br><img src="/image/deepLearning/46.png" alt><br><img src="/image/deepLearning/48.png" alt><br><img src="/image/deepLearning/47.png" alt></p>
+<h2 id="L2-具体实现"><a href="#L2-具体实现" class="headerlink" title="L2 具体实现"></a>L2 具体实现</h2><p><img src="/image/deepLearning/60.png" alt><br><img src="/image/deepLearning/61.png" alt></p>
+<h2 id="Dropout-正则化"><a href="#Dropout-正则化" class="headerlink" title="Dropout 正则化"></a>Dropout 正则化</h2><p>dropout 方法 实现原理就是在每层计算前前，生成随机蒙层，按keep_prob比例随机干掉一些节点，再参与运算，计算后除以keep_prob，保证最终输出的结果不变<br>在反向传播时，使用向前传播的蒙层对梯度进行相应的处理，保证该轮的参数矩阵相同，所以要对向前传播的蒙层进行缓存处理方便使用<br><img src="/image/deepLearning/49.png" alt><br><img src="/image/deepLearning/50.png" alt></p>
+<p>可以看到相比L2 类似于对w 进行缩小处理，dropout 方法类似于对w 进行放大处理, 因为干掉一些节点相当于随机取消某些w 的影响，最后除以keep_prob 相当于对w 进行放大处理</p>
+<h2 id="其它正则化方法"><a href="#其它正则化方法" class="headerlink" title="其它正则化方法"></a>其它正则化方法</h2><p>除了上面提到给cost函数添加L1,L2正则化项，还可以通过dropout 方法，数据增强，提早结束训练等正则化方法来避免过拟合的出现<br><img src="/image/deepLearning/51.png" alt><br><img src="/image/deepLearning/52.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/Regularization/index.py" target="_blank" rel="noopener">L2和Dropout实验</a></p>
+<h1 id="归一化训练集"><a href="#归一化训练集" class="headerlink" title="归一化训练集"></a>归一化训练集</h1><p>通过对训练数据集进行归一化处理，加快梯度下降，提高训练速度<br>复习一下<a href="https://yoohannah.github.io/post/machineLearning/lineregression.html">特征放缩</a><br><img src="/image/deepLearning/53.png" alt><br><img src="/image/deepLearning/54.png" alt></p>
+<h1 id="初始化参数"><a href="#初始化参数" class="headerlink" title="初始化参数"></a>初始化参数</h1><p>由于神经网络的多层的计算过程中，权重是乘积关系，如果各层初始化参数一开始大于1 或者小于1，整个乘积下来，就导致y^ 无限大或者无限小，从而导致梯度爆炸或者梯度消失<br><img src="/image/deepLearning/55.png" alt><br>解决<br><img src="/image/deepLearning/56.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/Initialization/index.py" target="_blank" rel="noopener">不同初始化参数方式</a></p>
+<h1 id="梯度校验"><a href="#梯度校验" class="headerlink" title="梯度校验"></a>梯度校验</h1><p>双边误差会比单边误差更准确<br><img src="/image/deepLearning/57.png" alt><br>梯度校验的过程就是拿到一轮训练的参数和梯度，进行摊平处理，字典变 n * 1 二维数组，每一层的每一个w 是一个数组<br>对每一层每一个参数修改一个很小的值，一次加，一次减，重新计算cost 值，拿到两个cost 值后进行双边误差计算，<br>整个参数都计算完后，与梯度进行比较，详见公式<br>如果比较值相差不大，说明梯度计算没有问题<br><img src="/image/deepLearning/58.png" alt><br><img src="/image/deepLearning/59.png" alt></p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p><img src="/image/deepLearning/62.png" alt><br><img src="/image/deepLearning/63.png" alt><br><img src="/image/deepLearning/64.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/GradientChecking/index.py" target="_blank" rel="noopener">具体代码</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/nodejs/streamExamp.html" rel="next" title="一个实现流通信的案例">
+                <i class="fa fa-chevron-left"></i> 一个实现流通信的案例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">242</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集的使用"><span class="nav-number">1.</span> <span class="nav-text">数据集的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用偏差-bias-和方差-variance-对模型进行评估"><span class="nav-number">2.</span> <span class="nav-text">使用偏差(bias)和方差(variance)对模型进行评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正则化处理-Regularization-过拟合问题"><span class="nav-number">2.1.</span> <span class="nav-text">正则化处理(Regularization)过拟合问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L2-具体实现"><span class="nav-number">2.2.</span> <span class="nav-text">L2 具体实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dropout-正则化"><span class="nav-number">2.3.</span> <span class="nav-text">Dropout 正则化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它正则化方法"><span class="nav-number">2.4.</span> <span class="nav-text">其它正则化方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归一化训练集"><span class="nav-number">3.</span> <span class="nav-text">归一化训练集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化参数"><span class="nav-number">4.</span> <span class="nav-text">初始化参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度校验"><span class="nav-number">5.</span> <span class="nav-text">梯度校验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">5.1.</span> <span class="nav-text">实验</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
