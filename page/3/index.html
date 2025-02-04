@@ -259,6 +259,141 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/logicRegression.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/machineLearning/logicRegression.html" itemprop="url">
+                  逻辑回归模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-17T19:31:37+08:00">
+                2024-09-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景-amp-amp-解决问题"><a href="#背景-amp-amp-解决问题" class="headerlink" title="背景&amp;&amp;解决问题"></a>背景&amp;&amp;解决问题</h1><p>逻辑回归模型时一种解决二分类问题的算法</p>
+<p>如果用线性回归去解决分类问题，会导致过拟合出现，每增加一个测试数据，都可能导致模型发生变化</p>
+<p><img src="/image/LLM/40.png" alt></p>
+<p>通过使用sigmoid function函数，设置阈值，可以将线性回归产生的结果归类到两个结果上去</p>
+<p><img src="/image/LLM/41.png" alt></p>
+<p><img src="/image/LLM/42.png" alt></p>
+<p>虽然目标是二分类，即结果只能是0 或者1<br>但是f(w,b) = g(w·x+b) 计算的结果值A只能无限接近这两个值<br>这里可以将A理解成结果是1 的可能性</p>
+<p><img src="/image/LLM/43.png" alt></p>
+<h2 id="决策边界"><a href="#决策边界" class="headerlink" title="决策边界"></a>决策边界</h2><p>在逻辑回归模型f(w,b) = g(w·x+b)  中<br>z = w·x+b 又称为 决策边界，将不同结果的数据在坐标系中进行隔离<br>如果特征在z 中没有多项式运算，那么，得到的边界必定是直线的，但是如果有多项式，拿得到的边界线就是非线性的<br><img src="/image/LLM/44.png" alt><br><img src="/image/LLM/45.png" alt><br><img src="/image/LLM/46.png" alt><br><img src="/image/LLM/47.png" alt></p>
+<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p>线性回归的平方误差算法的成本函数在应用到逻辑回归时，会产生多个局部最小值，再用梯度下降的算法去找参数时，无法找到最小值</p>
+<p><img src="/image/LLM/48.png" alt></p>
+<p>逻辑回归引入逻辑损失函数，根据单个数据集随参数变化的趋势，判断整体的变化趋势<br>操作就是将原本平方误差除以2的操作移到求和之前，单独计算每个特征值的部分就是损失函数</p>
+<p>Logistic Regression uses a loss function more suited to the task of categorization where the target is 0 or 1 rather than any number.</p>
+<p>these definitions are used:</p>
+<p>Loss is a measure of the difference of a single example to its target value while the</p>
+<p>Cost is a measure of the losses over the training set</p>
+<p>下面是推导过程和最终的式子</p>
+<p><img src="/image/LLM/49.png" alt><br><img src="/image/LLM/50.png" alt><br><img src="/image/LLM/51.png" alt><br><img src="/image/LLM/52.png" alt><br><img src="/image/LLM/53.png" alt></p>
+<h2 id="梯度下降找到w-amp-b"><a href="#梯度下降找到w-amp-b" class="headerlink" title="梯度下降找到w&amp;b"></a>梯度下降找到w&amp;b</h2><p><img src="/image/LLM/54.png" alt><br><img src="/image/LLM/55.png" alt><br><img src="/image/LLM/56.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/lineregression.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1935,161 +2070,6 @@ message.postDate = new Date()
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/systemDesign.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/systemDesign.html" itemprop="url">
-                  系统设计案例
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-02-02T09:31:06+08:00">
-                2022-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>案例：用户将存储内容粘贴到站点，站点给用户返回一个短地址，用户通过短地址，可以访问之前粘贴的内容或者跳转之前的原始站点</p>
-<h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ol>
-<li><p>对于用户来说操作要简单，生成的短地址要简单，而且要唯一，不同用户即使内容一样也要生成唯一的短地址</p>
-</li>
-<li><p>时间有效性，从存储角度来说，不可能一直帮用户存储所有生成的短地址，不然存储会越来越大，所以通过设置短地址有效的访问时间，可以减少存储成本</p>
-</li>
-</ol>
-<h1 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h1><ol>
-<li>可用性(high Availability)， 保障用户功能可用</li>
-<li>低延时(low latency)，用户拿到短地址或者通过短地址跳转其他网站时，重定向时间不宜过长</li>
-<li>安全性（non guessable），不能被猜出来，用户在生成一定短地址时如果携带一些个人信息，不应体现在短地址中，否则会造成用户信息泄露</li>
-<li>对于ins/微博/小红书之类的社交功能还要保障一致性，博主发的照片，follower看到的内容应该是一样的</li>
-</ol>
-<h1 id="容量负载能力假设"><a href="#容量负载能力假设" class="headerlink" title="容量负载能力假设"></a>容量负载能力假设</h1><p>对一个用户来说，可以抽象出两个主要请求</p>
-<ol>
-<li>请求生成短url，我们要把请求参数或者原始信息存储起来 inbound</li>
-<li>请求访问url，把生成的url返回给用户使用，进行重定向 outbound</li>
-</ol>
-<p>假设一个短地址按500byte大小存储</p>
-<h2 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h2><p>假设一个月会有100万个新短地址生成，<br>那么5年会产生</p>
-<p>100万<em>5年</em>12个月 ==&gt; 约等于60亿个短地址</p>
-<p>60亿*500byte ==&gt; 3TB 会有需要3TB大小的容量存储</p>
-<h2 id="负载能力"><a href="#负载能力" class="headerlink" title="负载能力"></a>负载能力</h2><p>假设一个月有100个用户，每个用户会进行100万次访问短地址进行重定向的操作</p>
-<p>那么每秒钟会有<br>（100 <em> 100万）/（30D </em> 24H * 3600s） ==&gt; 约等于4000个短url 要给到用户<br>同时会有<br>4000/ 100 ==&gt; 大概40个短url 需要被生成</p>
-<p>那么服务所需要的带宽就可以计算出来</p>
-<p>inbound : 40<em> 500 byte 约等于 20kb/s<br>outbound: 4000</em> 500 byte 约等于 20MB/s</p>
-<h1 id="API-数据库设计"><a href="#API-数据库设计" class="headerlink" title="API 数据库设计"></a>API 数据库设计</h1><h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>假设会用到简单的增删<br>生成短url createURL(api-key, originUrl, expired-Date, userId)<br>删除url  deleteURL(api-key,shortUrl)</p>
-<h2 id="DataBase"><a href="#DataBase" class="headerlink" title="DataBase"></a>DataBase</h2><p>对于shortUrl</p>
-<p>pk: hash<br>originUrl,<br>expired-date,<br>userId<br>…</p>
-<p>对于user<br>pk: userId<br>name<br>…</p>
-<h2 id="生成shortUrl"><a href="#生成shortUrl" class="headerlink" title="生成shortUrl"></a>生成shortUrl</h2><p>假如计划生成一个6个字符的短url，使用base64的加密算法的话可以生成64 ^ 6 大约640个短url,</p>
-<p>满足之前5年会产生60个亿的唯一性需求</p>
-<h1 id="整体逻辑"><a href="#整体逻辑" class="headerlink" title="整体逻辑"></a>整体逻辑</h1><p>用户 —&gt;request shortUrl generation —&gt; app</p>
-<p>app —&gt; base64 encoding + 从key generation DB中拿一个nonUse 的key —&gt; 得到shortUrl —&gt;DB</p>
-<p>DB —&gt; app –&gt;用户</p>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h2><p>2-8原则</p>
-<p>用存储的20% 的url做cache内容，可以满足80% 的访问需求</p>
-<h2 id="load-balance"><a href="#load-balance" class="headerlink" title="load balance"></a>load balance</h2><p>均衡流量</p>
-<h2 id="过期后的url处理，key的处理"><a href="#过期后的url处理，key的处理" class="headerlink" title="过期后的url处理，key的处理"></a>过期后的url处理，key的处理</h2><h2 id="分布式存储，分片"><a href="#分布式存储，分片" class="headerlink" title="分布式存储，分片"></a>分布式存储，分片</h2><h2 id="对于社交功能的newFeed的推送"><a href="#对于社交功能的newFeed的推送" class="headerlink" title="对于社交功能的newFeed的推送"></a>对于社交功能的newFeed的推送</h2><p>pull / push / pull + push hybrid</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2133,7 +2113,7 @@ message.postDate = new Date()
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">244</span>
+              <span class="site-state-item-count">245</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

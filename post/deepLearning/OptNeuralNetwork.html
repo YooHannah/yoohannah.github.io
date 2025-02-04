@@ -118,7 +118,29 @@
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/62.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/63.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/64.png">
-<meta property="og:updated_time" content="2025-01-31T06:56:01.077Z">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/89.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/90.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/91.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/92.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/93.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/94.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/95.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/96.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/97.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/98.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/99.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/100.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/101.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/102.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/103.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/104.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/105.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/106.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/107.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/108.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/109.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/110.png">
+<meta property="og:updated_time" content="2025-02-01T13:43:10.156Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一些优化深度神经网络【训练过程】的方法">
 <meta name="twitter:description" content="数据集的使用一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）训练集用于训练模型交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合) 如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和">
@@ -375,6 +397,40 @@
 <h1 id="初始化参数"><a href="#初始化参数" class="headerlink" title="初始化参数"></a>初始化参数</h1><p>由于神经网络的多层的计算过程中，权重是乘积关系，如果各层初始化参数一开始大于1 或者小于1，整个乘积下来，就导致y^ 无限大或者无限小，从而导致梯度爆炸或者梯度消失<br><img src="/image/deepLearning/55.png" alt><br>解决<br><img src="/image/deepLearning/56.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/Initialization/index.py" target="_blank" rel="noopener">不同初始化参数方式</a></p>
 <h1 id="梯度校验"><a href="#梯度校验" class="headerlink" title="梯度校验"></a>梯度校验</h1><p>双边误差会比单边误差更准确<br><img src="/image/deepLearning/57.png" alt><br>梯度校验的过程就是拿到一轮训练的参数和梯度，进行摊平处理，字典变 n * 1 二维数组，每一层的每一个w 是一个数组<br>对每一层每一个参数修改一个很小的值，一次加，一次减，重新计算cost 值，拿到两个cost 值后进行双边误差计算，<br>整个参数都计算完后，与梯度进行比较，详见公式<br>如果比较值相差不大，说明梯度计算没有问题<br><img src="/image/deepLearning/58.png" alt><br><img src="/image/deepLearning/59.png" alt></p>
 <h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p><img src="/image/deepLearning/62.png" alt><br><img src="/image/deepLearning/63.png" alt><br><img src="/image/deepLearning/64.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/GradientChecking/index.py" target="_blank" rel="noopener">具体代码</a></p>
+<h1 id="分析解决问题"><a href="#分析解决问题" class="headerlink" title="分析解决问题"></a>分析解决问题</h1><p>之前提到的一些优化模型的方法<br><img src="/image/deepLearning/89.png" alt></p>
+<h2 id="正交化"><a href="#正交化" class="headerlink" title="正交化"></a>正交化</h2><p>是一种解决问题的思想，简单来说就是通过将问题分解为相互独立的子问题，从而使得每个子问题可以独立解决，减少相互干扰<br>比如下面的训练过程，每一个阶段有每一个阶段要完成的目标，每一个阶段的实现目标过程会遇到不同问题，针对不同阶段不同问题采取相应解决办法<br>每个子目标相互独立，互不干扰一个阶段的目标完成后，再进行下一个阶段的目标<br><img src="/image/deepLearning/90.png" alt><br>就相当于把一个大问题分解为多个小问题，每个小问题相互独立，互不干扰，<br>针对不同问题，采取相应的解决办法，最终完整整个模型的训练</p>
+<h2 id="建立单一数字评估指标"><a href="#建立单一数字评估指标" class="headerlink" title="建立单一数字评估指标"></a>建立单一数字评估指标</h2><p>如果需要对多个指标进行优化，参考上面正交化思想，独立解决每个指标的优化问题，即建立单一数字评估指标<br>模型评估阶段会用到多个指标，比如准确率，召回率，F1 值，<br>但是这些指标之间存在相互影响，比如准确率高，召回率低，F1 值低<br>所以需要建立单一数字评估指标，比如F1 值，通过F1<br>此时F1 值就是【优化指标】(需要继续提高的指标)，其他指标就是【满足指标】(达到一定阈值即可)<br>之后模型训练相当于就朝着优化项指标进行训练，有的放矢<br>或者通过其他指标综合计算出唯一的指标值来评估模型优劣<br><a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">相关复习一</a><br><a href="https://yoohannah.github.io/post/machineLearning/abnormalTest.html">相关复习二</a><br><img src="/image/deepLearning/91.png" alt></p>
+<h2 id="混洗数据保证数据分布均匀"><a href="#混洗数据保证数据分布均匀" class="headerlink" title="混洗数据保证数据分布均匀"></a>混洗数据保证数据分布均匀</h2><p>避免dev和test集数据分布差异过大，在训练过程中，会导致模型训练效果不佳<br>在训练前，把数据进行混洗，打乱数据分布，保证dev和test数据分布差异不大</p>
+<blockquote>
+<p>Choose a dev set and test set to reflect data you expect to get in the future and consider important to do well on.</p>
+</blockquote>
+<h3 id="数据集大小建议"><a href="#数据集大小建议" class="headerlink" title="数据集大小建议"></a>数据集大小建议</h3><blockquote>
+<p>Set your dev set to be big enough to detect differences in algorithm/models you’re trying out.<br>Set your test set to be big enough to give high confidence in the overall performance of your system.<br>如果对实际数据效果要求较高，那么最好要有test set 进行性能测试，否则会影响实际使用效果</p>
+</blockquote>
+<h2 id="更改指标"><a href="#更改指标" class="headerlink" title="更改指标"></a>更改指标</h2><p>如果训练过程中，之前设置的指标已经不能满足模型训练要求，<br>或者已经错误的对模型进行了筛选，<br>要么需要更改指标，要么需要更改模型结构，要么更改dev/test set<br><img src="/image/deepLearning/92.png" alt><br><img src="/image/deepLearning/93.png" alt></p>
+<h2 id="以人的能力为参考"><a href="#以人的能力为参考" class="headerlink" title="以人的能力为参考"></a>以人的能力为参考</h2><p><img src="/image/deepLearning/94.png" alt><br>Why compare to human-level performance<br>Humans are quite good at a lot of tasks. So long as ML is worse than humans, you can:</p>
+<ul>
+<li>Get labeled data from humans.</li>
+<li>Gain insight from manual error analysis: Why did a person get this right?</li>
+<li>Better analysis of bias/variance.<br><img src="/image/deepLearning/95.png" alt></li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><img src="/image/deepLearning/96.png" alt><br><img src="/image/deepLearning/97.png" alt></p>
+<h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>对判断错误的数据进行错误类型统计分析，决定下一步优化方向，给出优先级<br><img src="/image/deepLearning/98.png" alt></p>
+<h2 id="清除标签错误"><a href="#清除标签错误" class="headerlink" title="清除标签错误"></a>清除标签错误</h2><p>如果dev/test set 数据中，存在标签错误的数据，<br>如果该类数据在错误数据中占比较大，已经影响到dev set 阶段对模型的选择<br>则需要采取措施进行标签错误的数据清除<br><img src="/image/deepLearning/99.png" alt></p>
+<blockquote>
+<p>Correcting incorrect dev/test set examples<br>• Apply same process to your dev and test sets to make sure they continue to come from the same distribution 分布相同<br>• Consider examining examples your algorithm got right as well as ones it got wrong.正确错误数据都检查下标签<br>• Train and dev/test data may now come from slightly different distributions. 训练数据和验证测试数据现在可以来自稍微不同的分布</p>
+</blockquote>
+<h3 id="不同分布数据集处理"><a href="#不同分布数据集处理" class="headerlink" title="不同分布数据集处理"></a>不同分布数据集处理</h3><p>对于训练集和验证测试集分布不同的问题<br>不建议将数据混洗后再进行训练，这样会导致验证测试阶段不是实际数据，而是部分测试数据的问题<br>更好的处理办法是把验证测试集数据集的50%也进行训练，剩下50%再均分进行验证测试<br><img src="/image/deepLearning/100.png" alt><br><img src="/image/deepLearning/101.png" alt></p>
+<h2 id="快速搭建然后迭代"><a href="#快速搭建然后迭代" class="headerlink" title="快速搭建然后迭代"></a>快速搭建然后迭代</h2><p>如果需要对一个全新的问题进行模型训练，建议快速搭建模型，然后迭代，在迭代中发现问题，优化算法<br>• Set up dev/test set and metric<br>• Build initial system quickly<br>• Use Bias/Variance analysis &amp; Error analysis to prioritize next steps.<br>但是要尽可能避免系统过于简单或者过于复杂，<br>对于有众多论文支持的问题，比如人脸识别，可以根据论文快速搭建复杂模型，然后开始训练<br>对于陌生领域的问题，则可以由简单到复杂进行训练</p>
+<h2 id="不匹配数据"><a href="#不匹配数据" class="headerlink" title="不匹配数据"></a>不匹配数据</h2><p>更细致的对错误率进行分析，通过计算不同错误率的差值，分析不同原因比重，决定优化方向<br>· 可避免偏差<br>· 方差，如果比较大，说明模型不能泛化到同一分布数据<br>· 数据不匹配，训练数据和验证数据可能分布不同<br>· 过拟合程度<br><img src="/image/deepLearning/102.png" alt><br><img src="/image/deepLearning/103.png" alt><br><img src="/image/deepLearning/104.png" alt></p>
+<h3 id="如何结局数据不匹配问题"><a href="#如何结局数据不匹配问题" class="headerlink" title="如何结局数据不匹配问题"></a>如何结局数据不匹配问题</h3><p>对train set 和dev set进行错误分析，找出二者不同，然后尽可能多的用dev set 数据进行训练<br>除了去收集真实的dev set，还可以通过人工合成的数据进行训练，<br>但是要注意，人工合成的数据只是实际数据的一个子集，避免出现对子集数据过拟合的情况<br>Addressing data mismatch<br>• Carry out manual error analysis to try to understand difference between training and dev/test sets<br>• Make training data more similar; or collect more data similar to dev/test sets<br><img src="/image/deepLearning/105.png" alt><br><img src="/image/deepLearning/106.png" alt></p>
+<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p><a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">复习</a><br>适用情形<br>• Task A and B have the same input x.<br>• You have a lot more data for Task A than Task B.<br>• Low level features from A could be helpful for learning B.<br><img src="/image/deepLearning/107.png" alt></p>
+<h1 id="多任务学习"><a href="#多任务学习" class="headerlink" title="多任务学习"></a>多任务学习</h1><p>建立单一神经网络同时输出多个任务的结果<br>适用情形<br>• Training on a set of tasks that could benefit from having shared lower-level features.<br>• Usually: Amount of data you have for each task is quite similar.<br>• Can train a big enough neural network to do well on all the tasks.<br><img src="/image/deepLearning/108.png" alt></p>
+<h1 id="端到端深度学习"><a href="#端到端深度学习" class="headerlink" title="端到端深度学习"></a>端到端深度学习</h1><p>端到端深度学习（End-to-End Deep Learning）是指在构建和训练深度学习模型时，直接从原始输入数据到最终输出结果的整个过程都由一个单一的模型来完成。<br>这种方法避免了传统机器学习中常见的多个独立步骤和手工特征工程，旨在通过一个统一的模型自动学习和优化整个任务。</p>
+<p>优点:<br>• Let the data speak<br>• Less hand-designing of components needed<br>缺点:<br>• May need large amount of data<br>• Excludes potentially useful hand-designed components</p>
+<p>适用情形<br>Do you have sufficient data to learn a function of the complexity needed to map x to y?<br>有没有足够有效的直接从x到y映射数据用来进行复杂函数的学习？</p>
+<p>现实中，如果没足够多x-&gt; Y  的映射数据，存在中间数据方便，x-&gt; Z -&gt; Y 这样的映射数据，<br>那么将端到端任务分解成两个小任务，会更简单<br>比如下面的人脸识别和根据手X光图片判断儿童年龄，自动驾驶，但如果是机器翻译就比较适合端到端</p>
+<p><img src="/image/deepLearning/109.png" alt><br><img src="/image/deepLearning/110.png" alt></p>
 
       
     </div>
@@ -485,7 +541,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">244</span>
+              <span class="site-state-item-count">245</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -544,7 +600,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集的使用"><span class="nav-number">1.</span> <span class="nav-text">数据集的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用偏差-bias-和方差-variance-对模型进行评估"><span class="nav-number">2.</span> <span class="nav-text">使用偏差(bias)和方差(variance)对模型进行评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正则化处理-Regularization-过拟合问题"><span class="nav-number">2.1.</span> <span class="nav-text">正则化处理(Regularization)过拟合问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L2-具体实现"><span class="nav-number">2.2.</span> <span class="nav-text">L2 具体实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dropout-正则化"><span class="nav-number">2.3.</span> <span class="nav-text">Dropout 正则化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它正则化方法"><span class="nav-number">2.4.</span> <span class="nav-text">其它正则化方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归一化训练集"><span class="nav-number">3.</span> <span class="nav-text">归一化训练集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化参数"><span class="nav-number">4.</span> <span class="nav-text">初始化参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度校验"><span class="nav-number">5.</span> <span class="nav-text">梯度校验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">5.1.</span> <span class="nav-text">实验</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集的使用"><span class="nav-number">1.</span> <span class="nav-text">数据集的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用偏差-bias-和方差-variance-对模型进行评估"><span class="nav-number">2.</span> <span class="nav-text">使用偏差(bias)和方差(variance)对模型进行评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正则化处理-Regularization-过拟合问题"><span class="nav-number">2.1.</span> <span class="nav-text">正则化处理(Regularization)过拟合问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L2-具体实现"><span class="nav-number">2.2.</span> <span class="nav-text">L2 具体实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dropout-正则化"><span class="nav-number">2.3.</span> <span class="nav-text">Dropout 正则化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它正则化方法"><span class="nav-number">2.4.</span> <span class="nav-text">其它正则化方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归一化训练集"><span class="nav-number">3.</span> <span class="nav-text">归一化训练集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化参数"><span class="nav-number">4.</span> <span class="nav-text">初始化参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度校验"><span class="nav-number">5.</span> <span class="nav-text">梯度校验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">5.1.</span> <span class="nav-text">实验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析解决问题"><span class="nav-number">6.</span> <span class="nav-text">分析解决问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正交化"><span class="nav-number">6.1.</span> <span class="nav-text">正交化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立单一数字评估指标"><span class="nav-number">6.2.</span> <span class="nav-text">建立单一数字评估指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混洗数据保证数据分布均匀"><span class="nav-number">6.3.</span> <span class="nav-text">混洗数据保证数据分布均匀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集大小建议"><span class="nav-number">6.3.1.</span> <span class="nav-text">数据集大小建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更改指标"><span class="nav-number">6.4.</span> <span class="nav-text">更改指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以人的能力为参考"><span class="nav-number">6.5.</span> <span class="nav-text">以人的能力为参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">6.6.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#错误分析"><span class="nav-number">7.</span> <span class="nav-text">错误分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#清除标签错误"><span class="nav-number">7.1.</span> <span class="nav-text">清除标签错误</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不同分布数据集处理"><span class="nav-number">7.1.1.</span> <span class="nav-text">不同分布数据集处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速搭建然后迭代"><span class="nav-number">7.2.</span> <span class="nav-text">快速搭建然后迭代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不匹配数据"><span class="nav-number">7.3.</span> <span class="nav-text">不匹配数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何结局数据不匹配问题"><span class="nav-number">7.3.1.</span> <span class="nav-text">如何结局数据不匹配问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习"><span class="nav-number">8.</span> <span class="nav-text">迁移学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多任务学习"><span class="nav-number">9.</span> <span class="nav-text">多任务学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#端到端深度学习"><span class="nav-number">10.</span> <span class="nav-text">端到端深度学习</span></a></li></ol></div>
             
 
           </div>
