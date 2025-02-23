@@ -403,30 +403,73 @@
 <h2 id="定义输出"><a href="#定义输出" class="headerlink" title="定义输出"></a>定义输出</h2><p>在分类的基础上，定义输出是一个向量，包含分类和定位信息<br>pc 代表是否有检测目标存在，存在为1，不存在为0，不存在的情况下，后续向量值不做继续讨论<br>bx 对象中心点横坐标<br>by 对象中心店纵坐标<br>bh 对象在图中相对整幅图片高度<br>bw 对象在图中相对整幅图片宽度<br>c1 c2 c3 代表具体是哪一个对象，其中一个值为1 时，另外两个为0，同时pc 为1<br><img src="/image/deepLearning/151.png" alt><br>损失函数分为pc 是否为1 两种计算方式<br>在实际计算过程中，可能会去将y 向量分类，pc, bx ~bw, c1~c3 然后分别使用不同的计算方法进行损失值计算<br><img src="/image/deepLearning/152.png" alt></p>
 <h3 id="特征点检测"><a href="#特征点检测" class="headerlink" title="特征点检测"></a>特征点检测</h3><p>原理同定位检测，只不过输出向量是N个特征点的位置坐标 + pc值<br><img src="/image/deepLearning/153.png" alt></p>
 <h2 id="滑动窗口进行图像识别"><a href="#滑动窗口进行图像识别" class="headerlink" title="滑动窗口进行图像识别"></a>滑动窗口进行图像识别</h2><p>识别一张图片中是否有某个物体的过程一般是通过分别定义不同大小的窗口，对图片进行滑动裁剪<br>对裁剪到的图片进行对象识别，但是这样无疑会大大增加计算量<br>解决方案就是利用卷积计算的过程，避免窗口滑动过程重复区域的重复计算<br>直接将一张图片输入，直接得到物体识别的结果<br><img src="/image/deepLearning/154.png" alt><br>卷积滑动窗口的具体实现，现将FC 层也转成卷积层，方便输入各个窗口的计算值<br><img src="/image/deepLearning/155.png" alt><br><img src="/image/deepLearning/156.png" alt></p>
-<h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p>YOLO(you only look once) 算法通过对图片进行格子分割，直接对格子内图片进行对象识别，从而更准确的判断对象位置<br>最后的输出结果代表每个格子的识别和位置检测结果<br><img src="/image/deepLearning/157.png" alt><br>如何解释结果？<br>bx,by,相对一个格子而言，肯定要小于1<br>bh,bw 同样相对于一个格子的大小，进行比例计算，有可能大于1，说明对象是跨格子存在的<br><img src="/image/deepLearning/158.png" alt></p>
-<h3 id="交并比"><a href="#交并比" class="headerlink" title="交并比"></a>交并比</h3><p>用于评价一个位置检测算法的好坏<br>预测值面积与实际对象所占面积重叠的部分就是交集大小 –&gt; S1<br>二者面积之和即为并集大小 –&gt;S2<br>交并比 = S1/S2<br>阈值认为决定，1 当然是最好的，说明准确发现了对象位置<br><img src="/image/deepLearning/159.png" alt></p>
-<h3 id="非最大值抑制-？？？"><a href="#非最大值抑制-？？？" class="headerlink" title="非最大值抑制 ？？？"></a>非最大值抑制 ？？？</h3><p>用于解决出现多个位置检测符合条件的情况<br><img src="/image/deepLearning/160.png" alt><br>原理就是在符合条件的窗口中寻找最大正交比</p>
+<h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p>YOLO(you only look once) 算法通过对图片进行格子分割，直接对格子内图片进行对象识别，从而更准确的判断对象位置<br>最后的输出结果代表每个格子的识别和位置检测结果<br><img src="/image/deepLearning/157.png" alt><br>如何解释结果？<br>将框看做左上角(0,0)，右下角(1,1) 的坐标<br>bx,by,相对一个格子而言，是中心，肯定要小于1<br>bh,bw 同样相对于一个格子的大小，进行比例计算，有可能大于1，说明对象是跨格子存在的<br><img src="/image/deepLearning/158.png" alt></p>
+<h3 id="交并比"><a href="#交并比" class="headerlink" title="交并比"></a>交并比</h3><p>用于评价一个位置检测算法的好坏<br>预测值面积与实际对象所占面积重叠的部分就是交集大小 –&gt; S1<br>二者面积之和即为并集大小 –&gt;S2<br>交并比 = S1/S2<br>阈值认为决定，1 当然是最好的，说明准确发现了对象位置，<br>在YOLO 中用于non_max_suppression 计算，排除重叠的格子<br><img src="/image/deepLearning/159.png" alt></p>
+<h3 id="非最大值抑制-non-max-suppression"><a href="#非最大值抑制-non-max-suppression" class="headerlink" title="非最大值抑制(non_max_suppression)"></a>非最大值抑制(non_max_suppression)</h3><p>用于解决出现多个位置检测符合条件的情况<br><img src="/image/deepLearning/160.png" alt><br>原理就是在符合条件的窗口中寻找最大正交比</p>
 <ol>
 <li>对于所有格子的输出，去掉pc概率小于阈值的格子</li>
 <li>对剩下格子循环处理，首先找pc值最大的格子A最为最终的检测结果，然后计算剩余格子与A 的交并比，去掉交并比大于一定阈值的格子(在最大值附近)，剩余格子的话，继续循环处理<br>如果是对多类对象进行同时检测，则需要对各个类别，分别进行非最大值抑制处理<br><img src="/image/deepLearning/161.png" alt></li>
 </ol>
-<h3 id="ancher-box-？"><a href="#ancher-box-？" class="headerlink" title="ancher box ？"></a>ancher box ？</h3><p>用于处理两个对象同时出现在一个格子的情况<br>提前定义两个不同形状的ancher box， 分别用不同ancher box去识别不同的对象<br>然后根据正交比大小，判断当前格子的对象是哪个分类，修改对应分类位置的值<br>注意这里，通过增加输出通道，输出从单一结果，变成两个<br>一般很少遇到3个对象同时出现在一个格子的情况，暂不考虑<br><img src="/image/deepLearning/162.png" alt><br><img src="/image/deepLearning/163.png" alt></p>
+<h3 id="ancher-box"><a href="#ancher-box" class="headerlink" title="ancher box"></a>ancher box</h3><p>用于处理两个对象同时出现在一个格子的情况<br>提前定义两个不同形状的ancher box， 分别用不同ancher box去识别不同的对象<br>然后根据正交比大小，判断当前格子的对象是哪个分类，修改对应分类位置的值<br>注意这里，通过增加输出通道，输出从单一结果，变成两个<br>一般很少遇到3个对象同时出现在一个格子的情况，暂不考虑<br><img src="/image/deepLearning/162.png" alt><br><img src="/image/deepLearning/163.png" alt></p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><img src="/image/deepLearning/164.png" alt><br><img src="/image/deepLearning/165.png" alt><br><img src="/image/deepLearning/166.png" alt></p>
+<blockquote>
+<p>Summary for YOLO:<br>Input image (608, 608, 3)<br>Image is split into a grid of 19x19 cells， Each cell predicts 5 boxes(uses 5 anchor boxes.)<br>就是直接切割成19x19的格子，对每个格子直接进行5种ancher box 的检测，这里避免了滑动窗口的重复计算<br>The input image goes through a CNN, resulting in a (19,19,5,85) dimensional output.<br>After flattening the last two dimensions, the output is a volume of shape (19, 19, 425):<br>Each cell in a 19x19 grid over the input image gives 425 numbers.<br>425 = 5 x 85 because each cell contains predictions for 5 boxes, corresponding to 5 anchor boxes, as seen in lecture.<br>85 = 5 + 80 where 5 is because $(p_c, b_x, b_y, b_h, b_w)$ has 5 numbers, and 80 is the number of classes we’d like to detect<br>You then select only few boxes based on:<br>Score-thresholding: throw away boxes that have detected a class with a score less than the threshold<br>Non-max suppression: Compute the Intersection over Union and avoid selecting overlapping boxes<br>This gives you YOLO’s final output.</p>
+</blockquote>
 <p>论文【难】： Redmon et al., 2015, You Only Look Once: Unified real-time object detection</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/LOYO.py" target="_blank" rel="noopener">实验</a></p>
 <h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p> 利用图像分割算法，对图像进行分割后，在一定区域内进行图像识别和定位<br>缺点不如YOLO一次性计算快</p>
 <p><img src="/image/deepLearning/167.png" alt><br><img src="/image/deepLearning/168.png" alt></p>
 <h1 id="人脸识别"><a href="#人脸识别" class="headerlink" title="人脸识别"></a>人脸识别</h1><h2 id="验证与识别"><a href="#验证与识别" class="headerlink" title="验证与识别"></a>验证与识别</h2><p>验证比识别要简单一些，属于1对1 的问题，识别输入仅仅是一张图，相对来说更难<br><img src="/image/deepLearning/169.png" alt></p>
+<blockquote>
+<p>Face recognition problems commonly fall into two categories:</p>
+</blockquote>
+<blockquote>
+<p>Face Verification - “is this the claimed person?”. For example, at some airports, you can pass through customs by letting a system scan your passport and then verifying that you (the person carrying the passport) are the correct person. A mobile phone that unlocks using your face is also using face verification. This is a 1:1 matching problem.</p>
+</blockquote>
+<blockquote>
+<p>Face Recognition - “who is this person?”. For example, the video lecture showed a face recognition video of Baidu employees entering the office without needing to otherwise identify themselves. This is a 1:K matching problem.</p>
+</blockquote>
 <h2 id="one-shot-amp-similarity"><a href="#one-shot-amp-similarity" class="headerlink" title="one shot &amp; similarity"></a>one shot &amp; similarity</h2><p>one shot learning 就是根据已有的一张图片对输入的图片进行识别<br>用传统的训练思维处理容易出现过拟合，而且数据库更新需要重新训练，成本高<br><img src="/image/deepLearning/170.png" alt><br>解决方式是通过看他们相似度的方法进行图片验证，比较输入图片和图库图片，<br>有差值小于阈值的图片的话，说明有这个人，没有小于阈值的图片的话，则输入图片对应的人没有在数据库中<br><img src="/image/deepLearning/171.png" alt></p>
 <h3 id="Siamese-network"><a href="#Siamese-network" class="headerlink" title="Siamese network"></a>Siamese network</h3><p>根据相似度进行图片验证的网络架构<br>原理就是，对两张图片进行相同的网络架构处理得到能够尽可能代表两张图片的128为编码<br>然后对两个编码进行范数运算，如果是同一个人则范数值会很小，否则会很大<br><img src="/image/deepLearning/172.png" alt><br>模型训练过程也是通过进行范数比较然后再去调整模型参数<br><img src="/image/deepLearning/173.png" alt></p>
 <p>论文： Taigman et. al., 2014. DeepFace closing the gap to human level performance</p>
-<h3 id="三元损失函数"><a href="#三元损失函数" class="headerlink" title="三元损失函数"></a>三元损失函数</h3><p>在训练过程过程中，通过构造识别对象的三元组数据，进行损失函数计算<br>具体过程就是分别准备待识别对象A，与待识别对象相似的对象P，与待识别对象差异较大的对象N三者的图像编码<br>通过计算比较AP与AN 之间范数的大小关系，用作损失函数的计算<br>注意这里引入超参α用于加强 AP 与AN之间的差距，提高准确度，也防止出现图像编码始终为0，导致比较关系始终成立情况出现<br><img src="/image/deepLearning/174.png" alt><br><img src="/image/deepLearning/175.png" alt><br><img src="/image/deepLearning/176.png" alt></p>
+<blockquote>
+<p>So, an encoding is a good one if:</p>
+</blockquote>
+<blockquote>
+<p>The encodings of two images of the same person are quite similar to each other.<br>The encodings of two images of different persons are very different.</p>
+</blockquote>
+<h3 id="三元损失函数"><a href="#三元损失函数" class="headerlink" title="三元损失函数"></a>三元损失函数</h3><p>在训练过程过程中，通过构造识别对象的三元组数据，进行损失函数计算<br>具体过程就是分别准备待识别对象A，与待识别对象相似的对象P，与待识别对象差异较大的对象N三者的图像编码<br>通过计算比较AP与AN 之间范数的大小关系，用作损失函数的计算<br>注意这里引入超参α用于加强 AP 与AN之间的差距，提高准确度，也防止出现图像编码始终为0，导致比较关系始终成立情况出现<br><img src="/image/deepLearning/174.png" alt><br><img src="/image/deepLearning/175.png" alt><br><img src="/image/deepLearning/176.png" alt><br><img src="/image/deepLearning/201.png" alt></p>
 <p>论文：Schroff et al.,2015, FaceNet: A unified embedding for face recognition and clustering</p>
 <h3 id="Siamese-network-二分类"><a href="#Siamese-network-二分类" class="headerlink" title="Siamese network + 二分类"></a>Siamese network + 二分类</h3><p>在 Siamese network  基础上，对输入的两张图片进行计算得出0 和 1 的结果，直接判断二者是否是同一个人<br><img src="/image/deepLearning/177.png" alt><br>y^的计算方式可以有多种<br>在实际使用中可以提前计算好数据库中图片编码，需要验证的时候只计算输入图片编码即可<br><img src="/image/deepLearning/178.png" alt></p>
+<blockquote>
+<p>Key points to remember<br>Face verification solves an easier 1:1 matching problem; face recognition addresses a harder 1:K matching problem.<br>The triplet loss is an effective loss function for training a neural network to learn an encoding of a face image.<br>The same encoding can be used for verification and recognition. Measuring distances between two images’ encodings allows you to determine whether they are pictures of the same person.</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/FaceRecognition.py" target="_blank" rel="noopener">实验</a></p>
 <h1 id="神经风格迁移"><a href="#神经风格迁移" class="headerlink" title="神经风格迁移"></a>神经风格迁移</h1><p>将一张作为内容的图片C合并上一张具有艺术表现风格的图片S，从而生成一张具有图片B艺术表现风格，但图片内容是图片A 的新图片 G<br><img src="/image/deepLearning/179.png" alt></p>
+<blockquote>
+<p>The idea of using a network trained on a different task and applying it to a new task is called transfer learning.</p>
+</blockquote>
 <h2 id="可视化深层网络"><a href="#可视化深层网络" class="headerlink" title="可视化深层网络"></a>可视化深层网络</h2><p><img src="/image/deepLearning/180.png" alt><br><img src="/image/deepLearning/181.png" alt><br>【要去读】<br>论文： Zeiler and Fergus., 2013, Visualizing and understanding convolutional networks</p>
-<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p>由两部分组成，CG之间的内容成本函数Jcg（衡量内容相似度），SG之间的风格成本函数Jsg(衡量风格相似度)<br><img src="/image/deepLearning/182.png" alt><br><img src="/image/deepLearning/183.png" alt><br>论文：Gatys et al., 2015. A neural algorithm of artistic style. </p>
+<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p>由两部分组成，CG之间的内容成本函数Jcg（衡量内容相似度），SG之间的风格成本函数Jsg(衡量风格相似度)<br><img src="/image/deepLearning/182.png" alt><br><img src="/image/deepLearning/183.png" alt></p>
+<p>论文：Gatys et al., 2015. A neural algorithm of artistic style. </p>
+<p>具体实现过程<br><img src="/image/deepLearning/202.png" alt><br><img src="/image/deepLearning/203.png" alt></p>
 <h3 id="内容成本函数"><a href="#内容成本函数" class="headerlink" title="内容成本函数"></a>内容成本函数</h3><p>计算CG在相同预训练模型上某一层的激活函数值的相似度，如果二者相似说明图片有相似的内容<br><img src="/image/deepLearning/184.png" alt></p>
 <h3 id="风格成本函数"><a href="#风格成本函数" class="headerlink" title="风格成本函数"></a>风格成本函数</h3><p>如果两个通道间关联度高，说明图片风格特征同时出现的概率高<br>通过某一层计算激活函数值各通道间的关联程度定义来衡量图片的风格，<br>如果SG相似度低，则成本函数值高<br><img src="/image/deepLearning/185.png" alt><br><img src="/image/deepLearning/186.png" alt><br><img src="/image/deepLearning/187.png" alt><br><img src="/image/deepLearning/188.png" alt></p>
+<p>具体实现过程<br><img src="/image/deepLearning/204.png" alt><br><img src="/image/deepLearning/205.png" alt><br><img src="/image/deepLearning/206.png" alt><br><img src="/image/deepLearning/207.png" alt><br><img src="/image/deepLearning/208.png" alt></p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><blockquote>
+<p>What you should remember<br>Neural Style Transfer is an algorithm that given a content image C and a style image S can generate an artistic image<br>It uses representations (hidden layer activations) based on a pretrained ConvNet.<br>The content cost function is computed using one hidden layer’s activations.<br>The style cost function for one layer is computed using the Gram matrix of that layer’s activations. The overall style cost function is obtained using several hidden layers.<br>Optimizing the total cost function results in synthesizing new images.</p>
+</blockquote>
+<blockquote>
+<p>You can also tune your hyperparameters:</p>
+</blockquote>
+<blockquote>
+<p>Which layers are responsible for representing the style? STYLE_LAYERS<br>How many iterations do you want to run the algorithm? num_iterations<br>What is the relative weighting between content and style? alpha/beta</p>
+</blockquote>
+<p>====》</p>
+<blockquote>
+<p> first time building a model in which the optimization algorithm updates the pixel values rather than the neural network’s parameters. Deep learning has many different types of models and this is only one of them!</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralStyleTransfer.py" target="_blank" rel="noopener">实验</a></p>
 <h1 id="1D-2D-3D-卷积计算"><a href="#1D-2D-3D-卷积计算" class="headerlink" title="1D 2D 3D 卷积计算"></a>1D 2D 3D 卷积计算</h1><p><img src="/image/deepLearning/189.png" alt><br><img src="/image/deepLearning/190.png" alt></p>
 
           
